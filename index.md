@@ -1,29 +1,27 @@
-# <center>LEARNING SINGING FROM SPEECH</center>
+# <center>DurIAN-SC: Duration Informed Attention Network based Singing Voice Conversion System</center>
 
-<center>Liqiang Zhang, Chengzhu Yu, Heng Lu, Chao Weng, Yusong Wu, Xiang Xie, Zijin Li, Dong Yu</center>
+<center>Liqiang Zhang, Chengzhu Yu, Heng Lu, Chao Weng, Chunlei Zhang, Yusong Wu, Xiang Xie, Zijin Li, Dong Yu</center>
 <center>Tencent AI Lab</center>
 
 
 ## Abstract
 
-<div style="text-align: justify"> We propose an algorithm that is capable of synthesizing high quality target speaker's singing voice given only their normal speech samples. The proposed algorithm first integrate speech and singing synthesis into a unified framework, and learns universal speaker embeddings that are shareable between speech and singing synthesis tasks. Specifically, the speaker embeddings learned from normal speech via the speech synthesis objective are shared with those learned from singing samples via the singing synthesis objective in the unified training framework. This makes the learned speaker embedding a transferable representation for both speaking and singing. We evaluate the proposed algorithm on singing voice conversion task where the content of original singing is covered with the timbre of another speaker's voice learned purely from their normal speech samples. Our experiments indicate that the proposed algorithm generates high-quality singing voices that sound highly similar to target speaker’s voice given only his or her normal speech samples. We believe that proposed algorithm will open up new opportunities for singing synthesis and conversion for broader users and applications. </div> 
+<div style="text-align: justify"> Singing voice conversion is converting the timbre in the source singing to the target speaker's voice while keeping singing content the same. However, singing data for target speaker is much more difficult to collect compared with normal speech data. In this paper, we introduce a singing voice conversion algorithm that is capable of generating high quality target speaker's singing using only his/her normal speech data. First, we manage to integrate the training and conversion process of speech and singing into one framework by unifying the features used in standard speech synthesis system and singing synthesis system. In this way, normal speech data can also contribute to singing voice conversion training, making the singing voice conversion system more robust especially when the singing database is small. Moreover, in order to achieve one-shot singing voice conversion, a speaker embedding module is developed using both speech and singing data, which provides target speaker identify information during conversion. Experiments indicate proposed sing conversion system can convert source singing to target speaker's high-quality singing with only 20 seconds of target speaker's enrollment speech data.</div> 
 
 <br>
 
-![arch](images/DurIAN_4S.png)
+![arch](images/DurIAN_SC.png)
 
 <br>
 
-## Sound Samples
+## Look Up Table(LUT) based speaker embedding & D-vector based speaker embedding 
 
 <br>
 \* <sup>Note: All samples are in Mandrin Chinese.</sup>
 <br>
-\* <sup>The singing conversion samples of 1 singer, 3 male speakers and 3 female speakers are shown here.</sup>
+\* <sup>There are 6 in-set singers---3 male singers and 3 female singers, shown here.</sup>
 <br>
-\* <sup>There are 5 same singing segments for each speaker and singer.</sup>
-<br>
-\* <sup>The "Source Voice" is from training data.</sup>
+\* <sup>The "Reference Voice" is shown here for timbre similarity test, which is the target singer's singing. </sup>
 
 
 <br>
@@ -33,119 +31,203 @@
   <thead>
     <tr>
       <th> </th>
-      <th>Source Voice</th>
-      <th>Singing Sample 1</th>
-      <th>Singing Sample 2</th>
-      <th>Singing Sample 3</th>
-      <th>Singing Sample 4</th>
-      <th>Singing Sample 5</th>
+      <th>Reference Voice</th>
+      <th>LUT Sample</th>
+      <th>D-vector Sample</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>Female Singer1</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/song_dx_801000013.wav"></audio></td>
+            <source src="wavs/inset_ref/101.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/dx_r_1.wav"></audio></td>
+            <source src="wavs/inset_emb/lut_101.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/dx_r_2.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/dx_r_3.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/dx_r_4.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/dx_r_5.wav"></audio></td>
+            <source src="wavs/inset_dvec/dvec_101.wav"></audio></td>
     </tr>
+    <tr>
+      <th>Female Singer2</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_ref/238.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_emb/lut_238.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_dvec/dvec_238.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Female Singer3</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_ref/1161.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_emb/lut_1161.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_dvec/dvec_1161.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Male Singer1</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_ref/658.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_emb/lut_658.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_dvec/dvec_658.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Male Singer2</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_ref/1189.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_emb/lut_1189.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_dvec/dvec_1189.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Male Singer3</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_ref/1512.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_emb/lut_1512.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/inset_dvec/dvec_1512.wav"></audio></td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+## Out-of-set test of D-vector based speaker embedding 
+
+<br>
+\* <sup>Note: All samples are in Mandrin Chinese.</sup>
+<br>
+\* <sup>There are 4 out-of-set speakers---2 male speakers and 2 female speakers, shown here.</sup>
+<br>
+\* <sup>The "Register Voice" is shown here for similarity test, which is the target speaker's speech.</sup>
+
+
+<br>
+
+<table align="center">
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Register Voice</th>
+      <th>D-vector Sample</th>
+    </tr>
+  </thead>
+  <tbody>
     <tr>
       <th>Female Speaker1</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/daj_000023.wav"></audio></td>
+            <source src="wavs/speech_ref/10004.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/daj_r_1.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/daj_r_2.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/daj_r_3.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/daj_r_4.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/daj_r_5.wav"></audio></td>
-    </tr>
-    <tr>
-      <th>Male Speaker1</th>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/liu_88010505.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/liu_r_1.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/liu_r_2.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/liu_r_3.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/liu_r_4.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/liu_r_5.wav"></audio></td>
+            <source src="wavs/outset_dvec/dvec_10004.wav"></audio></td>
     </tr>
     <tr>
       <th>Female Speaker2</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/gui_10000224.wav"></audio></td>
+            <source src="wavs/speech_ref/10005.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/gui_r_1.wav"></audio></td>
+            <source src="wavs/outset_dvec/dvec_10005.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Male Speaker1</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/gui_r_2.wav"></audio></td>
+            <source src="wavs/speech_ref/10003.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/gui_r_3.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/gui_r_4.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/gui_r_5.wav"></audio></td>
+            <source src="wavs/outset_dvec/dvec_10003.wav"></audio></td>
     </tr>
     <tr>
       <th>Male Speaker2</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/lpl_sample.wav"></audio></td>
+            <source src="wavs/speech_ref/10001.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/lpl_r_1.wav"></audio></td>
+            <source src="wavs/outset_dvec/dvec_10001.wav"></audio></td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+
+## Training with speech corpus
+
+<br>
+\* <sup>Note: All samples are in Mandrin Chinese.</sup>
+<br>
+\* <sup>There are 6 in-set speakers---3 male speakers and 3 female speakers, shown here.</sup>
+<br>
+\* <sup>The "Reference Voice" is shown here for timbre similarity test, which is the target speaker's speech. </sup>
+<br>
+\* <sup>"Speech only" means training only with speech data, while "Speech & Singing" means training with speech data and other singers' singing data. </sup>
+
+<br>
+
+
+<table align="center">
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Reference Voice</th>
+      <th>Speech Only</th>
+      <th>Speechh & Singing</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Male Speaker1</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/lpl_r_2.wav"></audio></td>
+            <source src="wavs/speech_ref/10001.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/lpl_r_3.wav"></audio></td>
+            <source src="wavs/speech_only/speech_10001.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/lpl_r_4.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/lpl_r_5.wav"></audio></td>
+            <source src="wavs/speech_and_singing/speech_and_sing_10001.wav"></audio></td>
     </tr>
     <tr>
-      <th>Female Speaker3</th>
+      <th>Male Speaker2</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/ssx_08010642.wav"></audio></td>
+            <source src="wavs/speech_ref/10002.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/ssx_r_1.wav"></audio></td>
+            <source src="wavs/speech_only/speech_10002.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/ssx_r_2.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/ssx_r_3.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/ssx_r_4.wav"></audio></td>
-      <td><audio controls="" preload="auto">
-            <source src="wavs/ssx_r_5.wav"></audio></td>
+            <source src="wavs/speech_and_singing/speech_and_sing_10002.wav"></audio></td>
     </tr>
     <tr>
       <th>Male Speaker3</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/025_000009.wav"></audio></td>
+            <source src="wavs/speech_ref/10003.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/025_r_1.wav"></audio></td>
+            <source src="wavs/speech_only/speech_10003.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/025_r_2.wav"></audio></td>
+            <source src="wavs/speech_and_singing/speech_and_sing_10003.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Female Speaker1</th>
       <td><audio controls="" preload="auto">
-            <source src="wavs/025_r_3.wav"></audio></td>
+            <source src="wavs/speech_ref/10004.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/025_r_4.wav"></audio></td>
+            <source src="wavs/speech_only/speech_10004.wav"></audio></td>
       <td><audio controls="" preload="auto">
-            <source src="wavs/025_r_5.wav"></audio></td>
+            <source src="wavs/speech_and_singing/speech_and_sing_10004.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Female Speaker2</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/speech_ref/10005.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/speech_only/speech_10005.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/speech_and_singing/speech_and_sing_10005.wav"></audio></td>
+    </tr>
+    <tr>
+      <th>Female Speaker3</th>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/speech_ref/10006.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/speech_only/speech_10006.wav"></audio></td>
+      <td><audio controls="" preload="auto">
+            <source src="wavs/speech_and_singing/speech_and_sing_10006.wav"></audio></td>
     </tr>
   </tbody>
 </table>
